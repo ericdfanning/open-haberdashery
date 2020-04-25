@@ -1,0 +1,25 @@
+{
+  "short_name": "habboard",
+  "name": "Open Haberdashery",
+  "icons": [
+    {
+      "src": "../icons/ericFace-48.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "../icons/ericFace-96.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "../icons/ericFace-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#2196F3"
+}
