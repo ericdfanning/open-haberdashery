@@ -51,19 +51,6 @@ class App extends React.Component {
     }
 	}
 
-	// updateOff(e) {
-	// 	fetch('http://192.168.1.65:1297/update', {
-	// 	  method: "POST",
-	// 	  body: "OFF",
-	// 	  headers: {"Content-Type": "text/plain"}
-	// 	}).then((result) => {
-	// 	  // console.log('updating')
-	// 	  this.getStateFromOpenHab();
-	// 	}).catch(function(err) {
-	// 		console.log('error posting update', err)
-	// 	});
-	// }
-
 	updateOnOff(id, newState) {//`http://openHABPi.local:8080/rest/items/${id}`
 		console.log('new state for toggle', id, 'state', newState)
 		fetch(`http://openHABPi.local:8080/rest/items/${id}`, {
@@ -104,7 +91,7 @@ class App extends React.Component {
 	}
 
 	getStateFromOpenHab() {
-		fetch('http://192.168.1.65:1297/items')
+		fetch(`http://openHABPi.local:8080/rest/items`)
 			.then((response) => {
 			  return response.json();
 			})
