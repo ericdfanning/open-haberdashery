@@ -11,7 +11,17 @@ app.listen(app.get('port'), function() {
   console.log('Listening on port: ', port)
 });
 
-app.use(cors());
+//CORS middleware
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+    next();
+}
+app.use(allowCrossDomain);
+// app.use(cors());
 app.use(express.static(path.join(__dirname, './dist')));
 
 app.use(bodyParser.text());
@@ -29,7 +39,6 @@ app.get('/manifest.json', function(req, res) {
 })
 
 app.get('/icons/ericFace*', function(req, res) {
-	console.log('response', req.originalUrl.split('/icons/')[1])
 	res.sendFile(path.join(__dirname, `/icons/${req.originalUrl.split('/icons/')[1]}`))
 })
 

@@ -6,5 +6,4 @@ import '@babel/polyfill';
 
 // By getting the <div> element in index.html by the id 'app', 
   // React can render it's elements to the DOM
-  console.log('what the fuck top level')
 render(<App />, document.getElementById('app'))

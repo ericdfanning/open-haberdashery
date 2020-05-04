@@ -1,14 +1,24 @@
-import React, { Fragment, useState } from 'react';
-import InputSlider from './Slider.jsx';
+import React, { Fragment, useState, useRef, useEffect } from 'react';
+import VerticalSlider from './Slider.jsx';
 import $ from 'jquery';
 
 export default function Thing({ item, index, updateOnOff, updateValue, children, isMobile }) {
 	const [showSlider, updateShowSlider] = useState(false);
 	const [longPressed, updateLongPressed] = useState(false);
-	const [checkingLongPress, udpateCheckingLongPress] = useState(false);
-	const [mousePress, udpateMousePress] = useState(false);
-	const [touchPress, udpateTouchPress] = useState(false);
+	const [hasInteraction, updateHasInteraction] = useState(false);
 	const [milli, udpateMilli] = useState(0);
+
+	const interactionRef = useRef(hasInteraction);
+	const showSliderRef = useRef(showSlider);
+
+	useEffect(() => {
+	  interactionRef.current = hasInteraction;
+	}, [hasInteraction]);
+
+	useEffect(() => {
+	  showSliderRef.current = showSlider;
+	}, [showSlider]);
+
 	let buttonPressTimer;
 	let state = item.state;
 	let stateString = `State: ${state}`;
@@ -23,7 +33,6 @@ export default function Thing({ item, index, updateOnOff, updateValue, children,
 	let count = 0;
 
 	const checkLongPress = () => {
-		console.log('setting long press')
 		count = 1;
 		// updateLongPressed(true)
 	}
@@ -47,23 +56,30 @@ export default function Thing({ item, index, updateOnOff, updateValue, children,
 	const handleButtonRelease = (e) => {
 		e.stopPropagation()
 		e.preventDefault()
-
 		let date = new Date()
 		let newTime = date.getSeconds() + Number(date.getMilliseconds()/1000);
-		console.log('releasing button', Number(newTime - milli).toFixed(3), e.target.id)
-		if (Number(Number(newTime - milli).toFixed(3)) > 0.250) {
+
+		if (Number(Number(newTime - milli).toFixed(3)) >= 0.300 && e.target.id) {
 			updateShowSlider(true)
-		} else if (Number(Number(newTime - milli).toFixed(3)) < 0.150) {
+			startSliderTimer()
+		} else if (Number(Number(newTime - milli).toFixed(3)) < 0.300) {
 			let newState;
-			if (state === 0) {
+			if (state === 0 || state === 'OFF') {
 				newState = 'ON'
-			} else if (state > 0) {
+			} else if (state > 0 || state === 'ON') {
 				newState = 'OFF'
 			}
-			console.log('what is state', state)
 			updateOnOff(newState)
 		}
 		udpateMilli(0);
+  }
+
+  const startSliderTimer = () => {
+  	setTimeout(() => {
+  		if (!interactionRef.current) {
+  	  	updateShowSlider(false);
+  		}
+  	}, 2000)
   }
 
 	return (
@@ -82,10 +98,21 @@ export default function Thing({ item, index, updateOnOff, updateValue, children,
 					  onMouseUp={handleButtonRelease}
 					  onTouchEnd={handleButtonRelease} 
 					 >
-					{state > 0 ? state: 'Off'}</div>
+						{(state > 0 || state === 'ON') ? state: 'Off'}
+						{showSlider &&
+							<div className={`vertical-slider-container vertical-slider-container__${index}`}>
+								<VerticalSlider
+									update={updateValue}
+									state={state}
+									updateHasInteraction={updateHasInteraction}
+									updateShowSlider={updateShowSlider}
+									hasInteraction={hasInteraction}
+								/>
+							</div>
+						}
+					</div>
 				</div>
 			</div>
-			{showSlider && <InputSlider update={updateValue} state={state}/>}
 		</div>
 	)
 }

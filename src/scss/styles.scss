@@ -1,5 +1,5 @@
 body {
-	background-color: #FEFEFE;
+	background-color: #FDFDFD;
 }
 
 .container {
@@ -9,6 +9,36 @@ body {
 	grid-row-gap: 30px;
 	grid-column-gap: 30px;
 	align-items: flex-start;
+}
+
+.vertical-slider-container {
+	width: 80px;
+	background: white;
+	position: absolute;
+	border: 1px solid lightgrey;
+	border-radius: 5px;
+	top: -85px;
+	left: -75px;
+
+	&__0 {
+		top: -35px;
+	}
+/*
+	&__ {
+		top: -120px;
+	}*/
+}
+
+.MuiInputBase-input {
+	text-align: center !important;
+}
+
+.MuiInput-underline:before {
+	border-bottom: none !important;
+}
+
+.brightness-label {
+	font-size: 12px;
 }
 
 .card {
@@ -23,7 +53,7 @@ body {
 		width: 100%;
 		min-width: 250px;
 		height: auto;
-		box-shadow: 1px 1px 2px lightgrey;
+		box-shadow: 2px 2px 3px lightgrey;
 		border-radius: 3px;
 		background-color: white;
 	}
@@ -38,6 +68,7 @@ body {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		position: relative;
 	}
 
 	&__name-command-container {
@@ -59,8 +90,9 @@ body {
 	}
 
 	&__label {
-		font-size: 28px;
-		font-weight: bold;
+		font-size: 26px;
+		font-weight: 200;
+		font-family: 'Arial', sans-serif;
 	}
 
 	&__name {

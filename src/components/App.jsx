@@ -33,10 +33,13 @@ class App extends React.Component {
 		this.state = {
 			data: [],
 			isMobile: false,
+			prod: (process.env.NODE_ENV === 'production'),
+			devUpdateUrl: `http://192.168.1.65:8888/update`,
+			devFetchUrl: `http://192.168.1.65:8888/items`
 		}
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		//check to see if device is laptop or phone
 		var w = window,
     d = document,
@@ -52,8 +55,8 @@ class App extends React.Component {
 	}
 
 	updateOnOff(id, newState) {//`http://openHABPi.local:8080/rest/items/${id}`
-		console.log('new state for toggle', id, 'state', newState)
-		fetch(`http://openHABPi.local:8080/rest/items/${id}`, {
+		let prodUrl = `http://openHABPi.local:8080/rest/items/${id}`;
+		fetch((this.state.prod ? prodUrl : this.state.devUpdateUrl), {
 		  method: "POST",
 		  body: `${newState}`,
 		  headers: {"Content-Type": "text/plain"}
@@ -66,8 +69,8 @@ class App extends React.Component {
 	}
 
 	updateValue(id, value) {
-		console.log('updating value dimmer', id, value)
-		fetch(`http://openHABPi.local:8080/rest/items/${id}`, {
+		let prodUrl = `http://openHABPi.local:8080/rest/items/${id}`;
+		fetch((this.state.prod ? prodUrl : this.state.devUpdateUrl), {
 		  method: "POST",
 		  body: `${value}`,
 		  headers: {"Content-Type": "text/plain"}
@@ -91,7 +94,8 @@ class App extends React.Component {
 	}
 
 	getStateFromOpenHab() {
-		fetch(`http://openHABPi.local:8080/rest/items`)
+		let prodUrl = `http://openHABPi.local:8080/rest/items`;
+		fetch((this.state.prod ? prodUrl : this.state.devFetchUrl))
 			.then((response) => {
 			  return response.json();
 			})
@@ -108,7 +112,6 @@ class App extends React.Component {
 	}
 
 	render() {
-		console.log('rendering')
 		return (
 			<div className='container'>
 			{this.state.data && this.state.data.map( (item, index) => {
