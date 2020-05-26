@@ -33,7 +33,6 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "regenerator-runtime": "^0.13.5",
-    "superCoolComponent": "file:../../../superCoolComponent-1.0.1-beta.2.tgz",
     "webpack": "^4.43.0"
   },
   "devDependencies": {
