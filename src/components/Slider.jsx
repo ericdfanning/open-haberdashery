@@ -1,9 +1,10 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useContext, Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import Grid from '@material-ui/core/Grid';
 import Input from '@material-ui/core/Input';
+import { LongPressContext } from '@tencoder/longpressreact';
 
 const useStyles = makeStyles({
   root: {
@@ -15,7 +16,8 @@ function valuetext(value) {
   return `${value}`;
 }
 
-export default function VerticalSlider({ update, state, updateHasInteraction, updateShowSlider, hasInteraction }) {
+export default function VerticalSlider({ update, state }) {
+  const { setHasInteraction, setShowInteractionElements } = useContext(LongPressContext);
   const classes = useStyles();
   const [value, setValue] = useState(state);
 
@@ -25,12 +27,13 @@ export default function VerticalSlider({ update, state, updateHasInteraction, up
 
   const handleTouchEnd = (event) => {
     update(value)
-    updateShowSlider(false);
-    updateHasInteraction(false);
+    console.log('closing elemente')
+    setShowInteractionElements(false);
+    setHasInteraction(false);
   }
 
   const handleInteractionStart = (event) => {
-    updateHasInteraction(true);
+    setHasInteraction(true);
   }
 
   const handleInputChange = (event) => {

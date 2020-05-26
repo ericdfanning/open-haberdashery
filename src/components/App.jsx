@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect, Fragment } from 'react';
 import $ from 'jquery';
 import Slider from './Slider.jsx';
-import Thing from './Thing.jsx';
+import { Thing } from './Thing.jsx';
 
 const filters = {
 	usr_xtrr_a: "Exterior Lights ON/OFF",
@@ -118,6 +118,7 @@ class App extends React.Component {
 				return (
 					<Thing
 						item={item}
+						key={index}
 						index={index}
 						updateOnOff={this.updateOnOff.bind(this, item.name)}
 						updateValue={this.updateValue.bind(this, item.name)}

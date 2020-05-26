@@ -1,25 +1,9 @@
-import React, { Fragment, useState, useRef, useEffect } from 'react';
+import React, { Fragment, useState, useRef, useEffect, useContext } from 'react';
 import VerticalSlider from './Slider.jsx';
-import $ from 'jquery';
+import { LongPress } from '@tencoder/longpressreact';
 
-export default function Thing({ item, index, updateOnOff, updateValue, children, isMobile }) {
-	const [showSlider, updateShowSlider] = useState(false);
-	const [longPressed, updateLongPressed] = useState(false);
-	const [hasInteraction, updateHasInteraction] = useState(false);
-	const [milli, udpateMilli] = useState(0);
-
-	const interactionRef = useRef(hasInteraction);
-	const showSliderRef = useRef(showSlider);
-
-	useEffect(() => {
-	  interactionRef.current = hasInteraction;
-	}, [hasInteraction]);
-
-	useEffect(() => {
-	  showSliderRef.current = showSlider;
-	}, [showSlider]);
-
-	let buttonPressTimer;
+export function Thing({ item, index, updateOnOff, updateValue, children, isMobile }) {
+	const [hideChildren, setHideChildren] = useState(false);
 	let state = item.state;
 	let stateString = `State: ${state}`;
 	if (item.type === 'Dimmer') {
@@ -30,61 +14,32 @@ export default function Thing({ item, index, updateOnOff, updateValue, children,
 			stateString = `Brightness: ${state}%`;
 		}
 	}
-	let count = 0;
 
-	const checkLongPress = () => {
-		count = 1;
-		// updateLongPressed(true)
+	const onClickDefault = () => {
+		console.log('CALL BACK DEFAULT')
+		let newState;
+		if (state === 0 || state === 'OFF') {
+			newState = 'ON'
+		} else if (state > 0 || state === 'ON') {
+			newState = 'OFF'
+		}
+		updateOnOff(newState)
 	}
-	const handleButtonPress = (e) =>{
-		// console.log('TOUCH PRESS', longPressed, e.target.id, 'date stamp:', `${date.getSeconds() + Number(date.getMilliseconds()/1000)}`)
-		if (isMobile) {
-			let date = new Date()
-			udpateMilli(date.getSeconds() + Number(date.getMilliseconds()/1000))
-		}
 
- 	}
-	const handleButtonPressMouse = (e) =>{
-		// let date = new Date()
-		// console.log('MOUSE PRESS', longPressed, e.target.id, 'data mili:', `${date.getSeconds() + Number(date.getMilliseconds()/1000)}`)
-		if (!isMobile) {
-			let date = new Date()
-			udpateMilli(date.getSeconds() + Number(date.getMilliseconds()/1000))
-		}
- 	}
-
-	const handleButtonRelease = (e) => {
-		e.stopPropagation()
-		e.preventDefault()
-		let date = new Date()
-		let newTime = date.getSeconds() + Number(date.getMilliseconds()/1000);
-
-		if (Number(Number(newTime - milli).toFixed(3)) >= 0.300 && e.target.id) {
-			updateShowSlider(true)
-			startSliderTimer()
-		} else if (Number(Number(newTime - milli).toFixed(3)) < 0.300) {
-			let newState;
-			if (state === 0 || state === 'OFF') {
-				newState = 'ON'
-			} else if (state > 0 || state === 'ON') {
-				newState = 'OFF'
-			}
-			updateOnOff(newState)
-		}
-		udpateMilli(0);
-  }
-
-  const startSliderTimer = () => {
-  	setTimeout(() => {
-  		if (!interactionRef.current) {
-  	  	updateShowSlider(false);
-  		}
-  	}, 2000)
-  }
+	const longPressInteractionElements = () => {
+		return (
+			<div className={`vertical-slider-container vertical-slider-container__${index}`}>
+				<VerticalSlider
+					update={updateValue}
+					state={state}
+				/>
+			</div>
+		)
+	}
 
 	return (
 		<div className='card__container'>
-			<div key={index} className='card'>
+			<div className='card'>
 				<div className='card__name-command-container'>
 					<div className='card__label'>{item.label}</div>
 					<div className='card__name'>Name: {item.name}</div>
@@ -92,25 +47,19 @@ export default function Thing({ item, index, updateOnOff, updateValue, children,
 					<div className='card__state'>{stateString}</div>
 				</div>
 				<div className='card__on-off-container'>
-					<div key={index} className='card__command on_button' id={item.name}
-						onTouchStart={handleButtonPress}
-					  onMouseDown={handleButtonPressMouse} 
-					  onMouseUp={handleButtonRelease}
-					  onTouchEnd={handleButtonRelease} 
-					 >
+					<LongPress 
+						pressTime={300}
+						inactiveHide={true}
+						inactiveHideTime={2000}
+						onClickDefault={onClickDefault}
+						id={item.name}
+						classNames={'card__command on_button'}
+						elementOnInteraction={longPressInteractionElements()}
+					>
+						<div className=''>
 						{(state > 0 || state === 'ON') ? state: 'Off'}
-						{showSlider &&
-							<div className={`vertical-slider-container vertical-slider-container__${index}`}>
-								<VerticalSlider
-									update={updateValue}
-									state={state}
-									updateHasInteraction={updateHasInteraction}
-									updateShowSlider={updateShowSlider}
-									hasInteraction={hasInteraction}
-								/>
-							</div>
-						}
-					</div>
+						</div>
+					</LongPress>
 				</div>
 			</div>
 		</div>

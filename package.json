@@ -22,6 +22,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.8.7",
     "@material-ui/core": "^4.9.11",
+    "@tencoder/longpressreact": "^1.1.0",
     "body-parser": "^1.19.0",
     "core-js": "^3.6.5",
     "express": "^4.17.1",
@@ -32,6 +33,7 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "regenerator-runtime": "^0.13.5",
+    "superCoolComponent": "file:../../../superCoolComponent-1.0.1-beta.2.tgz",
     "webpack": "^4.43.0"
   },
   "devDependencies": {

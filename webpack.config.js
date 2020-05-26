@@ -44,5 +44,11 @@ module.exports = {
     filename: 'bundle.js',
     publicPath: '/'
   },
-  plugins: [HtmlWebpackPluginConfig]
+  plugins: [HtmlWebpackPluginConfig],
+  resolve: {
+    alias: {
+      react: path.resolve(__dirname, './node_modules/react')
+    },
+    symlinks: false
+  }
 };

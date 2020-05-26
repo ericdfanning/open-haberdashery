@@ -46,32 +46,32 @@ app.get('/sw.js', function(req, res) {
 	res.sendFile(path.join(__dirname, '/src/sw.js'))
 })
 
-// app.get('/items', function(req, res) {
-// 	fs.readFile('../../../Desktop/openHAB-state.txt', 'utf8', (err, data) => {
-// 	    if (err) throw err;
-// 	    let responseObj = {};
-// 	    let body = '';
-// 	    let results = JSON.parse(data);
+app.get('/items', function(req, res) {
+	fs.readFile('../../../Desktop/openHAB-state.txt', 'utf8', (err, data) => {
+	    if (err) throw err;
+	    let responseObj = {};
+	    let body = '';
+	    let results = JSON.parse(data);
 
-// 	// console.log('in the server results', results)
-// 	    // fs.writeFile("activeThings.txt", JSON.stringify(filteredData), (err) => { 
-// 	    //   if (err) 
-// 	    //     console.log(err); 
-// 	    //   else { 
-// 	    //     console.log("File written successfully\n"); 
-// 	    //     console.log("The written has the following contents:"); 
-// 	    //   } 
-// 	    // });
+	// console.log('in the server results', results)
+	    // fs.writeFile("activeThings.txt", JSON.stringify(filteredData), (err) => { 
+	    //   if (err) 
+	    //     console.log(err); 
+	    //   else { 
+	    //     console.log("File written successfully\n"); 
+	    //     console.log("The written has the following contents:"); 
+	    //   } 
+	    // });
 
-//   		res.status(200)
-//   		res.send(results)
-// 	    // console.log('whats the data', Object.values(JSON.parse(data)));
-// 	});
-// })
+  		res.status(200)
+  		res.send(results)
+	    // console.log('whats the data', Object.values(JSON.parse(data)));
+	});
+})
 
-// app.post('/update', function(req, res) {
+app.post('/update', function(req, res) {
 
-// 	console.log('req body', req.body, req.method)
-// 	res.status(200)
-// 	res.send()
-// })
+	console.log('req body', req.body, req.method)
+	res.status(200)
+	res.send()
+})
